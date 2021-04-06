@@ -1,4 +1,3 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 //Gradle构建过程
 //1、初始化阶段 (Initialization)
@@ -14,24 +13,45 @@
 //Project是Gradle中的基本概念之一，即一个工程。
 // 一个工程可以包含多个SubProject，也称为Module，最顶层的工程也称为RootProject。
 
-
 //自定义 Gradle 文件
 apply from: "config.gradle"
 
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 //buildscript顾名思义，是编译脚本，也就是说编译一个工程时需要的配置，例如常会看到下面这样的脚本，表示编译时要用到Android Gradle Plugin
 // 配置Gradle插件，闭包参数会在ScriptHandler上执行
+//
+//
+// "buildscript"的类型为script block，而且是最上层的script block，用于配置Gradle的Project实例。
+
+// 其API文档为https://docs.gradle.org/current/dsl/org.gradle.api.Project.html#org.gradle.api.Project:buildscript(groovy.lang.Closure)
+// 其余的根script block有"allprojects", "dependencies", "configurations"等，更多的可见https://docs.gradle.org/current/dsl/的“Build script structure”一节。
+// Script Block是一种method的调用，传入的参数为configuration closure。执行后会对Project的属性进行配置。
+
+// 此处的"buildscript"用于配置Project的全局build script，
+// project根目录下的build.gradle用于添加子工程或模块(所谓的module)共用的配置项。
 buildscript {
     ext.kotlin_version = "1.4.32"
 
+
+    //
     repositories {
-        google()
+        // 代码托管库，可以从https://jcenter.bintray.com/下载对应的代码库
         jcenter()
+        //同理于jcenter(),申明代码托管库Google，如果需要相应的代码库，那么就会去下载
+        google()
+        //有时你可能还会使用maven的代码托管库
+        //maven{ url 'https://jitpack.io'}
+
     }
 
+
+    //这里面依赖的插件应用于整个project，不同于module下面的build.gradle只应用于当前的module
     // 配置使用的仓库，闭包参数会在RepositoryHandler上执行
     dependencies {
+        //声明了一个Gradle插件用来作为Android开发编译工具，同时指定gradle版本号
         classpath "com.android.tools.build:gradle:4.1.3"
+        //声明整个Project的kotlin 版本
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
     }
@@ -52,4 +72,28 @@ allprojects {
 task clean(type: Delete) {
     println("Project '$name' runing clean task")
     delete rootProject.buildDir
+}
+
+beforeEvaluate {
+    println '配置阶段开始前的监听回调'
+}
+
+afterEvaluate {
+    println '配置阶段完成以后的回调'
+}
+
+gradle.buildStarted {
+    println 'build开始的回调监听'
+}
+
+gradle.buildFinished {
+    println 'build完毕后的回调监听'
+}
+
+gradle.beforeProject {
+    println 'gradle执行前的回调监听'
+}
+
+gradle.afterProject {
+    println 'gradle执行前的回调监听'
 }
