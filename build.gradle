@@ -1,23 +1,48 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+//Gradle构建过程
+//1、初始化阶段 (Initialization)
+//Gradle支持单个和多个工程的编译。在初始化阶段，Gradle判断需要参与编译的工程，为每个工程创建一个Project对象。
+//在这个阶段，Gradle会创建Settings对象，并在其上执行settings.gradle脚本，建立工程之间的层次关系。
+//2、配置阶段 (Configuration)
+//在这个阶段，Gradle会分别在每个Project对象上执行对应的build.gradle脚本，对Project进行配置。
+//3、执行阶段 (Execution)
+//在执行阶段，Gradle会判断配置阶段创建的哪些Task需要被执行，然后执行选中的每个Task。
+
+
+//Project、RootProject、SubProject (Module)
+//Project是Gradle中的基本概念之一，即一个工程。
+// 一个工程可以包含多个SubProject，也称为Module，最顶层的工程也称为RootProject。
+
+
 //自定义 Gradle 文件
 apply from: "config.gradle"
 
+
+//buildscript顾名思义，是编译脚本，也就是说编译一个工程时需要的配置，例如常会看到下面这样的脚本，表示编译时要用到Android Gradle Plugin
+// 配置Gradle插件，闭包参数会在ScriptHandler上执行
 buildscript {
-    ext.kotlin_version = "1.4.31"
+    ext.kotlin_version = "1.4.32"
+
     repositories {
         google()
         jcenter()
     }
+
+    // 配置使用的仓库，闭包参数会在RepositoryHandler上执行
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.3"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 
+//allprojects，则用于配置所有project，包括SubProject，
+// 因此allprojects里面的配置的东西，是所有工程代码需要的东西， 闭包参数会分别在每个Project上执行
+// 例如：依赖的各种开源库等
 allprojects {
+
+    // 配置使用的仓库，闭包参数会在RepositoryHandler上执行
     repositories {
         google()
         jcenter()
@@ -25,5 +50,6 @@ allprojects {
 }
 
 task clean(type: Delete) {
+    println("Project '$name' runing clean task")
     delete rootProject.buildDir
 }

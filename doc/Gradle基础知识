@@ -1,0 +1,164 @@
+
+https://developer.android.google.cn/studio/build/gradle-tips
+
+https://blog.csdn.net/hongxue8888/article/details/103125597
+
+Gradle是一个基于Groovy语言的强大的构建系统，Groovy则是在Java基础上扩展的、运行在JVM上的一种脚本语言。
+通过丰富的插件扩展，Gradle可以支持Java、JavaWeb、Groovy、Android等工程的编译，同时可以很方便的从Maven、Ant等迁移过来。
+C系列语言也有相应的Gradle插件，但Gradle支持最好的还是Java系列语言。
+部分内容是Android特有的（例如ProductFlavor），其他内容则是所有Gradle工程都相同或类似的知识
+
+以AndroidStudio中的Gradle为学习主线：
+用IDEA/Android Studio创建基于Gradle的工程时，默认会在工程根目录创建GradleWrapper，包括gradlew可执行脚本和gradle/wrapper文件夹，
+其中指定了和工程配套的gradle版本
+gradle/wrapper/gradle-wrapper.properties文件，指定了gradle版本、下载地址、下载的文件存放位置
+（Mac系统中默认在~/.gradle/wrapper/dists目录）。
+
+在工程根目录下直接执行./gradlew，会自动将参数传给wrapper指定版本的gradle，执行对应的命令；如果本机还没有该版本的gradle，则会先自动下载。
+
+Gradle使用Groovy语言封装了一整套API，通常把这套API称为DSL（Domain-Specific Languages，领域特定语言）。
+通常在我们配置Gradle编译参数时，所写的gradle脚本从形式上来看，像是一门有着特殊语法格式的语言。
+Gradle封装的DSL，按照固定格式用很简单的语法就能实现很复杂的配置，大大简化了配置工作。另一方面，也正是由于封装的非常完善，想深入学习Gradle，
+会感觉无从下手。
+Groovy是一种开源的脚本语言，在Java基础上进行了扩展，支持闭包、动态类型、元编程等特性，几乎兼容所有Java语法。
+因此很容易用Groovy实现领域特定语言(DSL, Domain-Specific Language)。
+
+可以通过DSL Reference文档查看Gradle DSL支持的语法配置项。
+例如：
+Gradle DSL Reference（Gradle原生支持的DSL配置）
+https://docs.gradle.org/current/dsl/
+Android Plugin DSL Reference（Android的DSL配置）
+http://google.github.io/android-gradle-dsl/current/
+
+Gradle构建过程
+1、初始化阶段 (Initialization)
+Gradle支持单个和多个工程的编译。在初始化阶段，Gradle判断需要参与编译的工程，为每个工程创建一个Project对象。
+在这个阶段，Gradle会创建Settings对象，并在其上执行settings.gradle脚本，建立工程之间的层次关系。
+2、配置阶段 (Configuration)
+在这个阶段，Gradle会分别在每个Project对象上执行对应的build.gradle脚本，对Project进行配置。
+3、执行阶段 (Execution)
+在执行阶段，Gradle会判断配置阶段创建的哪些Task需要被执行，然后执行选中的每个Task。
+
+
+Project、RootProject、SubProject (Module)
+Project是Gradle中的基本概念之一，即一个工程。一个工程可以包含多个SubProject，也称为Module，最顶层的工程也称为RootProject。
+
+一个标准的Android工程，文件结构如下。
+每个build.gradle对应一个Project，最外层的是RootProject，里面的app是SubProject。
+settings.gradle不是必须的，一般在包含子工程时就需要用这个文件指定，即我们通常所见的include ':app'脚本。
+这里的':app'就是子工程的名字，通常和文件夹名称对应。
+settings.gradle
+build.gradle
+app
+    build.gradle
+
+buildscript与allprojects
+在RootProject的build.gradle中，经常会看到buildscript和allprojects两个语句块，并且里面都定义了一些相同的东西。
+
+buildscript，顾名思义，是编译脚本，也就是说编译一个工程时需要的配置，例如常会看到下面这样的脚本，表示编译时要用到Android Gradle Plugin。
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+    }
+}
+allprojects，则用于配置所有project，包括SubProject，这里面的配置的东西，则是工程代码需要的东西，例如依赖的各种开源库等。
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+依赖冲突分解
+依赖项很多时，依赖项之间经常会发生冲突。例如多个SDK分别依赖了不同版本的AppCompat，就可能导致冲突。Gradle提供了一些API可以用来处理依赖冲突。
+
+常见的依赖冲突解决思路可参考：
+
+Gradle依赖项学习总结，dependencies、transitive、force、exclude的使用与依赖冲突解决
+https://www.paincker.com/gradle-dependencies
+
+
+常用API
+org.gradle.api.Project
+    Project对象是Gradle中最核心的API，通过Project对象可以访问所有Gradle特性。
+    Project继承了PluginAware、ExtensionAware，分别用于支持Plugin和Extension方法
+
+ Project与build.gradle
+    Project对象和build.gradle文件一一对应。在Gradle构建时，会先创建Settings实例并在其上执行settings.gradle；
+ 再通过Settings对象定义的Project层级，创建若干个Project实例，并分别在其上执行对应的build.gradle。
+
+
+ Extra属性
+    Project有一个Extra属性，可通过ext前缀在其中定义属性，定义好后可以不加ext前缀直接访问。
+
+org.gradle.api.invocation.Gradle
+    Gradle对象表示一次Gradle调用，通过Project.getGradle()可以获取这个对象。在一次构建过程中只有一个Gradle对象，
+    可在其上保存一些全局配置参数，包括StartParameter等。
+
+org.gradle.api.initialization.Settings
+
+    Settings对象主要用于配置Project的层级结构。
+    Settings对象和settings.gradle文件一一对应。
+    Gradle构建的第一步，就是创建Settings对象并其上执行settings.gradle脚本。
+
+    常用API示例：
+    include()可以配置包含Project，例如include ':app', ':library'
+    project()可获取ProjectDescriptor从而做一些配置，例如经常会配置Gradle依赖本地Library工程的路径：
+    include ':img:library'
+    project(':img:library').projectDir = new File('../../img/library')
+
+org.gradle.api.Task
+    Task也是Gradle中很重要的API。Task代表构建过程中的一个原子操作，例如编译classes文件或生成JavaDoc。
+    每个Task属于一个Project。每个Task都有一个名字。所属Project名+Task名可组成唯一的完整名(fully qualified path)，
+    例如:app:assemble。
+
+    Action
+    每个Task包含一个Action序列，并在Task执行时按先后顺序执行。通过Task的doFirst/doLast方法可以往Action序列的头部/末尾添加Action，
+    支持Action或闭包（闭包会被转换成Action对象）。
+
+    Task依赖和排序
+    每个Task可以依赖其他Task，执行Task时会先执行其依赖的Task，通过dependsOn可设置依赖。每个Task还可以设置在其他Task之前、之后执行，
+    一般可通过mustRunAfter设置。
+    例如下面的配置，执行A时一定会先执行B；执行A不一定会执行C；当A、C都要执行时一定先执行C。
+    taskA.dependsOn(taskB)
+    taskA.mustRunAfter(taskC)
+
+    Task创建
+    Gradle以Task（任务）的形式组织每一步操作，每个Task执行一个原子操作（例如把Java编译成class文件、把class打成jar/dex文件、APK签名等）。
+    每个Project包含若干Task，Task之间存在依赖关系，执行一个Task前，会先执行它所依赖的Task。
+    每个Task有自己的名字（例如'assemble'），结合其所属Project的名字（例如':app'），可以组成完整名（例如':app:assemble'）。
+    Gradle内建了一个名为tasks的Task，可以列举Project中的所有Task。
+。
+    在build.gradle中创建Task，最常见写法如下。task(xxx)是Project提供的API，最终调用了TaskContainer的create方法。可接收参数包括：
+    Task名称(必选)
+    Map<String, ?>类型配置(可选)
+    闭包配置(可选)
+    task hello(dependsOn: clean) {
+    	doLast {
+        	println 'hello'
+        }
+    }
+
+    Task任务依赖
+     A dependsOn B: 指定执行A任务之前必须先执行B任务
+     A mustRunAfter B :指定B任务在A任务之前执行，但是并不是依赖关系，如果只执行A任务则不需要执行B
+     A shouldRunAfter B :并行编译下 不一定A在B后面执行
+     A finalizedBy B :在A执行完后必定会执行B
+
+查看Project中的所有Task
+    Gradle内建了一个名为tasks的Task，可以列举Project中的所有Task
+    执行Task时，直接把Task名称传给gradle即可。
+    如果下载了Gradle并配置了环境变量，则可在工程根目录执行：
+    gradle tasks
+    或者是更推荐的做法，是在工程根目录下调用GradleWrapper执行：
+    ./gradlew tasks
+
+执行多个Task
+    如果需要先后执行多个Task，例如tasks和clean，将它们依次传给gradle即可：
+    ./gradlew tasks clean
+
+

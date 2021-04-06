@@ -1,0 +1,30 @@
+D:\Java\bin>keytool -genkey -v -keystore tain.jks -alias tain -storepass 1234321 -keypass 1234321 -keyalg RSA -keysize 2048 -validity 36500
+您的名字与姓氏是什么?
+  [Unknown]:  train
+您的组织单位名称是什么?
+  [Unknown]:  train
+您的组织名称是什么?
+  [Unknown]:  train
+您所在的城市或区域名称是什么?
+  [Unknown]:  sz
+您所在的省/市/自治区名称是什么?
+  [Unknown]:  sz
+该单位的双字母国家/地区代码是什么?
+  [Unknown]:  cn
+CN=train, OU=train, O=train, L=sz, ST=sz, C=cn是否正确?
+  [否]:  y
+
+正在为以下对象生成 2,048 位RSA密钥对和自签名证书 (SHA256withRSA) (有效期为 36,500 天):
+         CN=train, OU=train, O=train, L=sz, ST=sz, C=cn
+[正在存储tain.jks]
+
+Warning:
+JKS 密钥库使用专用格式。建议使用 "keytool -importkeystore -srckeystore tain.jks -destkeystore tain.jks -deststoretype pkcs12" 迁移到行业标准格式 PKCS12。
+
+D:\Java\bin>keytool -importkeystore -srckeystore tain.jks -destkeystore tain.jks -deststoretype pkcs12
+输入源密钥库口令:
+已成功导入别名 tain 的条目。
+已完成导入命令: 1 个条目成功导入, 0 个条目失败或取消
+
+Warning:
+已将 "tain.jks" 迁移到 Non JKS/JCEKS。将 JKS 密钥库作为 "tain.jks.old" 进行了备份。

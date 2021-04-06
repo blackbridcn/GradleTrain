@@ -1,49 +1,42 @@
 ext {
 
-    constraintLayoutVersion = '2.0.0-beta1'
-    constraintlayout = '1.1.3'
-
     //有重用的地方写在这里面，保证代码一致
     android = [
 
-            applicationId      : "com.train.gradletrain",
-            compileSdkVersion  : 30,
-            buildToolsVersion  : "30.0.3",
-            minSdkVersion      : 19,
-            targetSdkVersion   : 30,
+            applicationId       : "com.train.gradletrain",
+            compileSdkVersion   : 30,
+            buildToolsVersion   : "30.0.3",
+            minSdkVersion       : 19,
+            targetSdkVersion    : 30,
 
-            apkVerCode         : 1,
-            apkVerName         : "1.0.1",
-            libVerCode         : 1,
-            libVerName         : "L-1.0.1",
-            modVerCode         : 1,
-            modVerName         : "M-1.0.1",
+            apkVerCode          : 1,
+            apkVerName          : "1.0.1",
+            libVerCode          : 1,
+            libVerName          : "L-1.0.1",
+            modVerCode          : 1,
+            modVerName          : "M-1.0.1",
 
-            sourceCompatibility: '1.8',
-            targetCompatibility: '1.8',
-
-            versionInfo      : 'App的第1个版本，上线了一些最基础核心的功能.',
-            multiDexEnabled  : true,
+            versionInfo         : 'App的第1个版本，上线了一些最基础核心的功能.',
+            multiDexEnabled     : true,
             manifestPlaceholders: [UMENG_CHANNEL_VALUE: 'yingyongbao']]
 
 
     thridDepenVer = [
 
             androidxCore            : "1.0.1",
-            material                : "1.0.0",
-            constraintlayout        : "1.1.3",
-            androidxAppcompat       : "1.1.0",
+            material                : "1.2.1",
+            constraintlayout        : "2.0.4",
+            appcompat               : "1.2.0",
             swiperefreshlayout      : "1.0.0",
-            androidxCoreKtx         : "1.1.0",
+            corektx                 : "1.3.2",
             androidxRecyclerview    : "1.1.0",
             BaseRecyclerAdapter     : "3.0.1",
             legacySupportV4         : "1.0.0",
-            constraintLayoutVersion : '2.0.0-beta4',
+
 
             kotlinStdlibJdk         : '1.3.61',
 
             lifecycleExtensions     : '2.2.0',
-            lifecycleViewmodelKtx   : '2.2.0',
             lifecycleCompiler       : '2.2.0',
             navigationFragment      : '2.2.0',
             navigationUI            : '2.2.0',
@@ -91,7 +84,8 @@ ext {
             rxlifecycleAndroid         : '3.1.0',
             rxlifecycleComponents      : '3.1.0',
             rxlifecycleAndroidLifecycle: '3.1.0',
-
+            livedataktx                : '2.2.0',
+            lviewmodelktx              : '2.2.0',
             rxpermissions              : '0.9.5',
     ]
 
@@ -104,16 +98,15 @@ ext {
     dependencies = [
             "javax.annotation"             : 'javax.annotation:jsr250-api:1.0',
 
-            "appcompat"                    : "androidx.appcompat:appcompat:${thridDepenVer["androidxAppcompat"]}",
+            "appcompat"                    : "androidx.appcompat:appcompat:${thridDepenVer["appcompat"]}",
             "material"                     : "com.google.android.material:material:${thridDepenVer["material"]}",
             "androidxCore"                 : "androidx.core:core:${thridDepenVer["androidxCore"]}",
-            "androidxCoreKtx"              : "androidx.core:core-ktx:${thridDepenVer["androidxCoreKtx"]}",
+            "corektx"                      : "androidx.core:core-ktx:${thridDepenVer["corektx"]}",
             "legacySupportV4"              : "androidx.legacy:legacy-support-v4:${thridDepenVer["legacySupportV4"]}",
             "recyclerview"                 : "androidx.recyclerview:recyclerview:${thridDepenVer["androidxRecyclerview"]}",
             "BaseRecyclerAdapter"          : "com.github.CymChad:BaseRecyclerViewAdapterHelper:${thridDepenVer["BaseRecyclerAdapter"]}",//3.0.1
 
             "lifecycleExtensions"          : "androidx.lifecycle:lifecycle-extensions:${thridDepenVer["lifecycleExtensions"]}",
-            "lifecycleViewmodelKtx"        : "androidx.lifecycle:lifecycle-viewmodel-ktx:${thridDepenVer["lifecycleViewmodelKtx"]}",
             "lifecycle-compiler"           : "androidx.lifecycle:lifecycle-compiler:${thridDepenVer["lifecycleCompiler"]}",
 
             "navigationFragment"           : "androidx.navigation:navigation-fragment:${thridDepenVer["navigationFragment"]}",
@@ -125,7 +118,7 @@ ext {
             "annotations"                  : "com.android.support:support-annotations:${thridDepenVer["androidSupportSdkVersion"]}",
 
             "constraintlayout"             : "androidx.constraintlayout:constraintlayout:${thridDepenVer["constraintlayout"]}",
-            "constraintLayoutVersion"      : "androidx.constraintlayout:constraintlayout:${thridDepenVer["constraintLayoutVersion"]}",
+
             "swiperefreshlayout"           : "androidx.swiperefreshlayout:swiperefreshlayout:${thridDepenVer["swiperefreshlayout"]}",
 
             "multidex"                     : "androidx.multidex:multidex:${thridDepenVer["multidexVer"]}",//解决兼容性问题
@@ -149,6 +142,10 @@ ext {
             "rxlifecycle-android"          : "com.trello.rxlifecycle3:rxlifecycle-android:${reactiveX["rxlifecycleAndroid"]}",
             "rxlifecycle-components"       : "com.trello.rxlifecycle3:rxlifecycle-components:${reactiveX["rxlifecycleComponents"]}",
             "rxlifecycle-android-lifecycle": "com.trello.rxlifecycle3:rxlifecycle-android-lifecycle:${reactiveX["rxlifecycleAndroidLifecycle"]}",
+            "livedataktx"                  : "androidx.lifecycle:lifecycle-livedata-ktx:${reactiveX["livedataktx"]}",
+            "lviewmodelktx"                : "androidx.lifecycle:lifecycle-viewmodel-ktx:${reactiveX["lviewmodelktx"]}",
+
+
             "rxpermissions"                : "com.tbruyelle.rxpermissions2:rxpermissions:${reactiveX["rxpermissions"]}",
 
             //
