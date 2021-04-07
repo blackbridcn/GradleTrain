@@ -1,0 +1,44 @@
+
+项目build报告
+在项目的Terminal下运行如下命令：编译或者直接打debug包
+gradlew build -profile
+./gradlew assembleDebug --profile
+
+
+完成后以HTML的形式展示，可以根据build profile报告进行指定的优化
+
+./gradlew -v 版本号
+./gradlew clean 清除app目录下的build文件夹
+./gradlew build 检查依赖并编译打包
+./gradlew tasks 列出所有task
+
+./gradlew assembleDebug 编译并打Debug包
+./gradlew assembleRelease 编译并打Release的包
+
+./gradlew installRelease Release模式打包并安装
+./gradlew uninstallRelease 卸载Release模式包
+
+assemble结合Build Variants来创建task
+
+./gradlew assembleWandoujia
+./gradlew assembleWandoujiaRelease
+./gradlew assembleRelease
+
+
+编译或者run出错时可以通过下列命令追踪查找问题
+//debug 合并manifest 检查lib和application是否存在冲突
+gradlew  processDebugManifest--stacktrace
+
+
+./gradlew assembleRelease
+这条命令会把Product Flavor下的所有渠道的Release版本都打出来
+
+//Mac
+ ./gradlew   assemble
+
+./gradlew assembleDebug --stacktrace -info
+
+//Permission denied，则执行chmod +x gradlew
+
+// ~/.gradle/gradle.properties
+//open ~/.gradle/gradle.properties

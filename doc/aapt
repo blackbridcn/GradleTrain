@@ -1,0 +1,4 @@
+
+aapt即Android Asset Packaging Tool，在SDK的build-tools目录下。
+该工具可以查看，创建， 更新ZIP格式的文档附件(zip, jar, apk)。也可将资源文件编译成二进制文件，
+尽管你可能没有直接使用过aapt工具，但是build scripts和IDE插件会使用这个工具打包apk文件构成一个Android 应用程序

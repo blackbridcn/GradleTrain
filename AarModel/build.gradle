@@ -31,6 +31,16 @@ android {
         jvmTarget = '1.8'
     }
 
+    android.libraryVariants.all { variant ->
+        variant.outputs.each { output ->
+            if (output.outputFile != null && output.outputFile.name.endsWith('.aar')) {
+                def name = "${rootDir}/demo/libs/library.aar"
+                //output.outputFile = file(name)
+            }
+        }
+    }
+
+
 
 }
 

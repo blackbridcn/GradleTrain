@@ -1,4 +1,3 @@
-
 //Gradle构建过程
 //1、初始化阶段 (Initialization)
 //Gradle支持单个和多个工程的编译。在初始化阶段，Gradle判断需要参与编译的工程，为每个工程创建一个Project对象。
@@ -75,25 +74,31 @@ task clean(type: Delete) {
 }
 
 beforeEvaluate {
-    println '配置阶段开始前的监听回调'
+    println 'project build.gradle ****** beforeEvaluate ****** print log'
 }
 
 afterEvaluate {
-    println '配置阶段完成以后的回调'
+    println 'project build.gradle ****** afterEvaluate ****** print log'
 }
 
 gradle.buildStarted {
-    println 'build开始的回调监听'
+    println 'build.gradle ****** gradle.buildStarted ****** print log'
+    println 'build start callback listener'
 }
 
 gradle.buildFinished {
-    println 'build完毕后的回调监听'
+    println 'build.gradle ****** gradle.buildFinished ****** print log'
+    println 'build end callback listener'
 }
 
 gradle.beforeProject {
-    println 'gradle执行前的回调监听'
+    println 'build.gradle ****** gradle.beforeProject ****** print log'
+    println 'gradle do task before  callback listener'
+    // println 'gradle执行前的回调监听'
 }
 
 gradle.afterProject {
-    println 'gradle执行前的回调监听'
+    println 'build.gradle ****** gradle.afterProject ****** print log'
+    println 'gradle do task after  callback listener'
+    // println 'gradle执行前的回调监听'
 }

@@ -47,15 +47,10 @@ android {
     // XML代码中忽略 Lint：1.xml 中声明 tools 命名空间；2.使用 tools:ignore=”忽略的警告名”；例如： tools:ignore="all"
     lintOptions{
 
-        // If set to true, turns off analysis progress reporting by lint.
         //false 表示开启lint代码扫描检查进度report，true 表示关闭
         quiet false
-
-        // if set to true (default), stops the build if errors are found.
         //true 表示一旦扫描发现error时就终止build task，默认为true，false则相反；
         abortOnError true
-
-        // if true, only report errors.
         //是否忽略waring警告信息，true表示忽略，忽略后只report error级别消息
         ignoreWarnings false
 
@@ -87,7 +82,8 @@ android {
         noLines true
 
         // 覆盖 Lint 规则的严重程度，例如：
-        severityOverrides  ["MissingTranslation": LintOptions.SEVERITY_WARNING]
+       // severityOverrides  ["MissingTranslation": LintOptions.SEVERITY_WARNING]
+
         // 设置为 true 则显示一个问题所在的所有地方，而不会截短列表
         showAll true
         // 配置写入输出结果的位置，格式可以是文件或 stdout
@@ -110,6 +106,18 @@ android {
         ignore 'TypographyQuotes'
 
 
+    }
+
+    //aapt配置
+    aaptOptions {
+        //不用压缩的文件
+        noCompress 'pak', 'dat', 'bin', 'notice'
+        //打包时候要忽略的文件
+        ignoreAssetsPattern "!.svn:!.git"
+        //分包
+        multiDexEnabled true
+        //--extra-packages是为资源文件设置别名：意思是通过该应用包名+R，com.android.test1.R和com.android.test2.R都可以访问到资源
+        additionalParameters '--extra-packages', 'com.android.test1','--extra-packages','com.android.test2'
     }
 
 

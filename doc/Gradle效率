@@ -1,0 +1,29 @@
+
+1.尽可能使用最新gradle版本，Gradle在升级过程中一直对构建速度做了优化;
+以下的参数都是在project的gradle.properties下进行添加设置
+
+2.gradle.daemon守护进程
+    gradle会开启一个守护进程来和各个build任务进行交互，优点就是不需要每次构建都初始化需要的组件和服务。
+    同时因为守护进程是一个一直运行的进程，除了可以避免每次JVM启动的开销之外，还可以缓存项目结构，文件，task和其他的信息，从而提升运行速度
+    Gradle 3.0之后，daemons是默认开启的,可以使用 org.gradle.daemon=false 来关闭；
+    查看当前gradle 正在运行的daemons进程命令：
+    gradle –status
+
+    https://docs.gradle.org/6.5/userguide/gradle_daemon.html#sec:status
+
+3.org.gradle.parallel 并行编译
+    在多Module并且存在依赖关系比较复杂的项目时，开启并行编译可以明显提供编译效率；个人亲测编译时间有特别明显提高；
+
+4.android.enableBuildCache 开启编译缓存，编译缓存这个问题个人一直不太喜欢，因为有时候也会带来很多麻烦，总之根据个人习惯决定
+
+5.daemon’s 的堆大小，默认是 1 GB
+   org.gradle.jvmargs=-Xmx2048M
+
+5.使用 implementation 替代 compile，有效的减少编译时的依赖项，需升级至 Gradle 3.4 版本
+
+AppExtension的属性
+
+https://blog.csdn.net/qq_33689414/article/details/53152212?utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control&dist_request_id=1328767.83037.16177865207714675&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control
+aapt
+dexOptions
+Android加快Gradle编译速度（Kotlin） https://www.jianshu.com/p/c0a70fe26282
